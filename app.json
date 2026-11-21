@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "DomainGuard",
+    "slug": "domainguard",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#F8F9FA"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.domainguard.portal"
+    },
+    "android": {
+      "package": "com.domainguard.portal"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

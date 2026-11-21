@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // DomainGuard Backend Security Boundary
+    // Ensures only verified Google accounts belonging to @hbplus.fit can interact with documents.
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+    
+    function isHbplusEmployee() {
+      return isAuthenticated()
+        && isEmailVerified()
+        && request.auth.token.email != null
+        && request.auth.token.email.matches('.*@hbplus[.]fit$');
+    }
+    
+    function isAdmin() {
+      return isHbplusEmployee() && (
+        request.auth.token.role == 'admin' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    // User profile documents:
+    // Any hbplus employee can read profile documents;
+    // Users can only write to their own profile, and cannot arbitrarily grant themselves the admin role.
+    match /users/{userId} {
+      allow read: if isHbplusEmployee();
+      allow create: if isHbplusEmployee() 
+                    && request.auth.uid == userId
+                    && (!request.resource.data.keys().hasAny(['role']) || request.resource.data.role == 'user');
+      allow update: if isHbplusEmployee() 
+                    && request.auth.uid == userId
+                    && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // Internal company workspace resources:
+    match /workspaces/{workspaceId} {
+      allow read: if isHbplusEmployee();
+      allow write: if isAdmin();
+    }
+
+    // Audit logs for authentication events:
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isHbplusEmployee() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false; // Append-only immutable log
+    }
+    
+    // Deny all other access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
