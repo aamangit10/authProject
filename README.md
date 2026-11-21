@@ -1,5 +1,12 @@
 # DomainGuard — Secure Google Authentication Portal (Powered by Supabase)
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-domainguard--auth.netlify.app-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://domainguard-auth.netlify.app)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-authProject-181717?style=for-the-badge&logo=github)](https://github.com/aamangit10/authProject)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+
+> 🌐 **Live Production Application**: **[https://domainguard-auth.netlify.app](https://domainguard-auth.netlify.app)**
+> 
 > **Enterprise SSO & Domain-Enforced Identity Gate for React Native & React Native Web with Supabase Auth & PostgreSQL RLS**
 
 DomainGuard is a production-grade, cross-platform authentication portal built with **React Native**, **React Native Web**, **TypeScript**, and **Supabase**. It enforces strict single sign-on (SSO) boundaries, permitting authenticated access **exclusively** to verified users belonging to the official company domain: **`hbplus.fit`**.
